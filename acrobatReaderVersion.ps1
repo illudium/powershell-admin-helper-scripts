@@ -1,4 +1,4 @@
-# Define the next two variables, and modify the Set-Asset-Field at end of script
+# Define the next two variables, and modify then uncomment and revise Set-Asset-Field at end of script if used
 $appName = 'Adobe Acrobat Reader'
 $displayName = "ReaderDC"
              
@@ -17,4 +17,4 @@ if ($appVer -ne "") {
 else { $ReaderInfo = "N/A" }
 
 echo $AppInfo
-Set-Asset-Field -Name "Adobe_Reader" -Value ($AppInfo)
+#Set-Asset-Field -Name "Adobe_Reader" -Value ($AppInfo)
