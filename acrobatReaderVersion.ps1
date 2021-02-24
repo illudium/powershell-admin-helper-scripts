@@ -3,9 +3,7 @@ $appName = 'Adobe Acrobat Reader'
 $displayName = "ReaderDC"
              
 $appsList =  Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
-                       'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*',
-                       'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
-                       'HKCU:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' -ErrorAction Ignore                   
+                       'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'-ErrorAction Ignore                   
 
 
 $appVer = $appsList | Where-Object {$_.DisplayName -match $appName} | Select-Object -Property DisplayVersion -ExpandProperty DisplayVersion
