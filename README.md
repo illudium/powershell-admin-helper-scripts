@@ -6,6 +6,6 @@ Some (il)logic or parts thereof are my work, however.
 
 If something is here, I've used it at one time or another in the past.
 
-They're intended for enhancing some aspect of your <RMM-of-choice>
+They're intended for enhancing some aspect of your RMM-of-choice
 
 Cheers !
