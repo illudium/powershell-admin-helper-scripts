@@ -1,18 +1,11 @@
-# Define the next two variables, and modify then uncomment and revise Set-Asset-Field at end of script if used
-$appName = 'Adobe Acrobat Reader'
-$displayName = "ReaderDC"
-             
-$appsList =  Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
-                       'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'-ErrorAction Ignore                   
+$exe = "C:\Program Files*\Adobe\Acrobat *\Acrobat\Acrobat.exe"
+if (Test-Path $exe) {
+  $AdobeInfo = Get-ItemProperty "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" | where {$_.DisplayName -like 'Adobe Acrobat*' -and $_.DisplayName -NotLike '*Reader*'}
+  $acro_prod = (Get-ItemProperty "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" | where {$_.DisplayName -like 'Adobe Acrobat*' -and $_.DisplayName -NotLike '*Reader*'} | select-object -ExpandProperty DisplayName | %{$_.Split() | Select -Last 2}) -join ' '
+  $acro_ver =  (Get-ItemProperty "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" | where {$_.DisplayName -like 'Adobe Acrobat*' -and $_.DisplayName -NotLike '*Reader*'} | select-object -ExpandProperty DisplayVersion | %{$_.Split('.') | Select -First 3}) -join '.'
+  $installDate = (Get-ItemProperty "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" | where {$_.DisplayName -like 'Adobe Acrobat*' -and $_.DisplayName -NotLike '*Reader*'} | select-object -ExpandProperty InstallDate).Insert(4,'-').Insert(7,'-')       
+} 
 
+else { $acro_prod = "n/a" }
 
-$appVer = $appsList | Where-Object {$_.DisplayName -match $appName} | Select-Object -Property DisplayVersion -ExpandProperty DisplayVersion
-if ($appVer -ne "") { 
- $instDate = ($appsList | Where-Object {$_.DisplayName -match $appName} | Select-Object -Property InstallDate -ExpandProperty InstallDate).split(" ")[0].Insert(4,'-').Insert(7,'-')
- $AppInfo = -join($displayName, " ", "$appVer"," ", "$instDate")
- }
-
-else { $ReaderInfo = "N/A" }
-
-echo $AppInfo
-#Set-Asset-Field -Name "Adobe_Reader" -Value ($AppInfo)
+$AcrobatInfo = -join($acro_prod, "`n", $acro_ver, "  ", "$installDate")
