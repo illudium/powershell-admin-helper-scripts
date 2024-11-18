@@ -1,0 +1,31 @@
+# your csv needs one column header: email
+# with the current user email addresses below, in that column
+
+Connect-MgGraph -Scopes "User.ReadWrite.All" -NoWelcome
+
+ Import-Csv -Path "./changeImmutableID.csv" | Select-Object -ExpandProperty "email"
+
+#foreach ($user in $users) {
+
+foreach ($user in $users) {
+    # Get the user ID using the email address
+    $userDetails = (Get-MgUser -Filter "userPrincipalName eq '$user'" -Select Id, UserPrincipalName)
+    if ($userDetails) {
+        # Extract the username before the '@'
+        $username = $userDetails.UserPrincipalName.Split('@')[0]
+        write-host "username: $username"
+        # Construct the new ImmutableID
+        $interimUserName = "$username@company-name.onmicrosoft.com"
+        # Update the username
+        Update-MgUser -UserID $userDetails.ID -UserPrincipalName "$interimUserName"
+        Write-host "Temporarily changed the username for $user to $interimUserName"
+        # Set the user ImmutableID to username@company-name
+        Update-MgUser -UserId $userDetails.Id -OnPremisesImmutableId "$username@company-name"
+        Write-Host "Updated ImmutableID for $user to $username@company-name"
+        # Set the username to match
+        Update-MgUser -UserID $userDetails.ID -UserPrincipalName "$username@company-name"
+        Write-Host "Updated the username to match, now set to $username@company-name"
+    } else {
+        Write-Host "User not found for: $($userDetails.UserPrincipalName)"
+    }
+}
