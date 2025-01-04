@@ -3,9 +3,7 @@
 
 Connect-MgGraph -Scopes "User.ReadWrite.All" -NoWelcome
 
- Import-Csv -Path "./changeImmutableID.csv" | Select-Object -ExpandProperty "email"
-
-#foreach ($user in $users) {
+Import-Csv -Path "./changeImmutableID.csv" | Select-Object -ExpandProperty "email"
 
 foreach ($user in $users) {
     # Get the user ID using the email address
