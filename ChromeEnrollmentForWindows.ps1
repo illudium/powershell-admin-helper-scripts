@@ -10,7 +10,7 @@ Start-Transcript -Path $transcriptPath -Force -NoClobber
 
 $regkey = 'HKLM:\SOFTWARE\Policies\Google\Chrome'
 $name = 'CloudManagementEnrollmentToken'
-$mgmtToken = '<yourChromeMgmtTokenHERE'
+$mgmtToken = '<yourChromeMgmtTokenHERE>'
 
 try{
 $exists = Get-ItemProperty -path $regkey -name $name -ErrorAction SilentlyContinue
